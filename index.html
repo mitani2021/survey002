@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>三谷学園 世論調査</title>
+</head>
+<body>
+  <h1>三谷学園 第1回 世論調査</h1>
+  <form id="survey-form">
+    <label for="studentId">生徒番号：</label>
+    <select id="studentId" name="studentId" required>
+      <option value="">選択してください</option>
+      <!-- options 001〜100 -->
+      <script>
+        for (let i = 1; i <= 100; i++) {
+          const val = i.toString().padStart(3, '0');
+          document.write(`<option value="${val}">${val}</option>`);
+        }
+      </script>
+    </select><br><br>
+
+    <label for="issue">最も重要な学園の課題：</label><br>
+    <select id="issue" name="issue" required>
+      <option value="いじめが増加していること">いじめが増加していること</option>
+      <option value="部活動の予算を拡充すること">部活動の予算を拡充すること</option>
+      <option value="授業の質が低下していること">授業の質が低下していること</option>
+      <option value="学園祭の来場者数が減少していること">学園祭の来場者数が減少していること</option>
+      <option value="制服がダサいこと">制服がダサいこと</option>
+      <option value="校則が厳しすぎること">校則が厳しすぎること</option>
+      <option value="学生食堂の価格が高すぎること">学生食堂の価格が高すぎること</option>
+    </select><br><br>
+
+    <label for="candidate">支持する候補者：</label><br>
+    <select id="candidate" name="candidate" required>
+      <option value="神崎豪">神崎豪</option>
+      <option value="風馬裕也">風馬裕也</option>
+      <option value="田中和夫">田中和夫</option>
+      <option value="姫島ノエル">姫島ノエル</option>
+    </select><br><br>
+
+    <button type="submit">送信</button>
+  </form>
+
+  <script>
+    const form = document.getElementById('survey-form');
+    const submitButton = form.querySelector('button[type="submit"]');
+
+    form.addEventListener('submit', async function(e) {
+      e.preventDefault();
+
+      // 二重送信防止
+      if (submitButton.disabled) return;
+      submitButton.disabled = true;
+
+      const data = new FormData(form);
+      const params = new URLSearchParams();
+      for (const pair of data.entries()) {
+        params.append(pair[0], pair[1]);
+      }
+
+      try {
+        await fetch('https://script.google.com/macros/s/AKfycbyJ_6_iz-mtlB025F2W6LJYOmOPcpR8qEqhR4zxuYwUNLjb6gEDXwHlWrITSshPUqAU/exec', {
+          method: 'POST',
+          body: params
+        });
+        alert('送信が完了しました！');
+        form.reset();
+      } catch (error) {
+        alert('送信に失敗しました。もう一度お試しください。');
+      } finally {
+        submitButton.disabled = false;
+      }
+    });
+  </script>
+</body>
+</html>
